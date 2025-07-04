@@ -10,6 +10,15 @@ export interface TransferRatioDocument extends Document {
   modifiedAt: Date;
 }
 
+// to be used in the client
+export type ClientTransferRatio = Omit<TransferRatioDocument, "_id"> & {
+  _id: string;
+  programId: string;
+  creditCardId: string;
+  createdAt: string;
+  modifiedAt: string;
+};
+
 const TransferRatioSchema = new Schema<TransferRatioDocument>(
   {
     programId: {

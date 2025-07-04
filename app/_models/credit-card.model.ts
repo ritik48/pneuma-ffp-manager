@@ -9,6 +9,13 @@ export interface CreditCardDocument extends Document {
   modifiedAt: Date;
 }
 
+// to be used in the client
+export type ClientCreditCard = Omit<CreditCardDocument, "_id"> & {
+  _id: string;
+  createdAt: string;
+  modifiedAt: string;
+};
+
 const CreditCardSchema = new Schema<CreditCardDocument>(
   {
     name: {

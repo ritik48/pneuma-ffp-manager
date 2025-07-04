@@ -10,6 +10,16 @@ export interface FrequentFlyerProgramDocument extends Document {
   modifiedAt: Date;
 }
 
+// to be used in the client
+export type ClientFrequentFlyerProgram = Omit<
+  FrequentFlyerProgramDocument,
+  "_id"
+> & {
+  _id: string;
+  createdAt: string;
+  modifiedAt: string;
+};
+
 const FrequentFlyerProgramSchema = new Schema<FrequentFlyerProgramDocument>(
   {
     name: {
