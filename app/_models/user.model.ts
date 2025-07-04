@@ -1,4 +1,5 @@
 import { Schema, model, Document, models } from "mongoose";
+import { USER_COLLECTION } from "./collections";
 
 export interface IUser extends Document {
   email: string;
@@ -8,9 +9,9 @@ export interface IUser extends Document {
 const userSchema = new Schema<IUser>(
   {
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    password: { type: String, required: true, select: false },
   },
   { timestamps: true }
 );
 
-export const User = models.User || model<IUser>("User", userSchema);
+export const User = models.User || model<IUser>(USER_COLLECTION, userSchema);
