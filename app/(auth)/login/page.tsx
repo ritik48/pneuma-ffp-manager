@@ -42,7 +42,7 @@ export default function Signin() {
       <SearchParamsHandler />
       <section className="flex-1 flex flex-col">
         <div className="container flex-grow">
-          <div className="mx-auto sm:w-96 w-[98%] bg-slate-100 rounded-xl p-7 sm:p-8 gap-4 flex flex-col sm:mt-40 mt-20">
+          <div className="mx-auto sm:w-96 w-[98%] rounded-xl p-7 sm:p-8 gap-4 flex flex-col sm:mt-40 mt-20">
             <div className="text-center">
               <p className="text-xs">
                 Test: (email: test@gmail.com, password: 123)
@@ -85,12 +85,12 @@ export default function Signin() {
                   <Button disabled={isSubmitting} className="mt-3">
                     {isSubmitting ? "Logging in" : "Login"}
                   </Button>
-                  <Link
+                  {/* <Link
                     href={"/signup"}
                     className="text-left text-sm hover:underline mt-1"
                   >
                     Don&apos;t have an account ?
-                  </Link>
+                  </Link> */}
                 </div>
               </form>
             </Form>
