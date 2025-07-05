@@ -1,7 +1,8 @@
-import mongoose, { Schema, Document, models, model } from "mongoose";
+import mongoose, { Schema, Document, models, model, Types } from "mongoose";
 import { CREDIT_CARD_COLLECTION } from "./collections";
 
-export interface CreditCardDocument extends Document {
+export interface ClientCreditCard {
+  _id: string;
   name: string;
   bankName: string;
   archived: boolean;
@@ -9,12 +10,13 @@ export interface CreditCardDocument extends Document {
   modifiedAt: Date;
 }
 
-// to be used in the client
-export type ClientCreditCard = Omit<CreditCardDocument, "_id"> & {
-  _id: string;
-  createdAt: string;
-  modifiedAt: string;
-};
+export interface CreditCardDocument
+  extends Omit<ClientCreditCard, "_id" | "createdAt" | "modifiedAt">,
+    Document {
+  _id: Types.ObjectId;
+  createdAt: Date;
+  modifiedAt: Date;
+}
 
 const CreditCardSchema = new Schema<CreditCardDocument>(
   {
