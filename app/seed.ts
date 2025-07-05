@@ -79,79 +79,71 @@ export async function seed() {
     { name: "Enrich", assetName: "enrich.svg", enabled: true, archived: false },
     {
       name: "Privilege Club",
-      assetName: "privilege-club.svg",
       enabled: true,
       archived: false,
     },
     {
       name: "Miles&Smiles",
-      assetName: "miles-and-smiles.svg",
       enabled: true,
       archived: false,
     },
     {
       name: "Skywards",
-      assetName: "skywards.svg",
       enabled: true,
       archived: false,
     },
     {
       name: "Asia Miles",
-      assetName: "asia-miles.svg",
       enabled: true,
       archived: false,
     },
     {
       name: "Airpoints",
-      assetName: "airpoints.svg",
       enabled: true,
       archived: false,
     },
     {
       name: "Maharaja Club",
-      assetName: "maharaja-club.svg",
       enabled: true,
       archived: false,
     },
     {
       name: "TrueBlue",
-      assetName: "trueblue.svg",
+
       enabled: true,
       archived: false,
     },
     {
       name: "LifeMiles",
-      assetName: "lifemiles.svg",
+
       enabled: true,
       archived: false,
     },
     {
       name: "Aeroplan",
-      assetName: "aeroplan.svg",
+
       enabled: true,
       archived: false,
     },
     {
       name: "Executive Club",
-      assetName: "executive-club.svg",
+
       enabled: true,
       archived: false,
     },
     {
       name: "Frequent Flyer",
-      assetName: "qantas-frequent-flyer.svg",
+
       enabled: true,
       archived: false,
     },
     {
       name: "TAP Miles&Go",
-      assetName: "miles-and-go.svg",
       enabled: true,
       archived: false,
     },
     {
       name: "AeroMexico Rewards",
-      assetName: "aeromexico-rewards.svg",
       enabled: true,
       archived: false,
     },
