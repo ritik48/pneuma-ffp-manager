@@ -25,6 +25,7 @@ import { fetchFrequentFlyerPrograms } from "@/actions";
 import { DeleteFrequentFlyer } from "./delete-frequent-flyer";
 import { FrequentFlyerDialogWrapper } from "./frequent-flyer-dialog-wrapper";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { FrequentFlyerToggle } from "./toggle-frequent-flyer-program";
 
 export default function FrequentFlyerClientTable() {
   const [page, setPage] = useState(1);
@@ -71,7 +72,7 @@ export default function FrequentFlyerClientTable() {
   return (
     <div className="space-y-4 px-3">
       <div className="flex justify-between items-center">
-        <h1 className="sm:text-xl font-semibold">
+        <h1 className="sm:text-xl sm:w-full w-1/3 font-semibold">
           Frequent Flyer Programs{" "}
           <span className="text-xs text-muted-foreground">({total})</span>
         </h1>
@@ -119,7 +120,11 @@ export default function FrequentFlyerClientTable() {
                   </Avatar>
                 </TableCell>
                 <TableCell>
-                  <Switch checked={ffp.enabled} disabled />
+                  <FrequentFlyerToggle
+                    initialEnabled={ffp.enabled}
+                    id={ffp._id}
+                    queryKey={queryKey}
+                  />
                 </TableCell>
                 <TableCell className="text-xs sm:text-sm">
                   {format(new Date(ffp.createdAt), "PPP p")}
