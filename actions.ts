@@ -1,6 +1,6 @@
 "use server";
 
-import { SortOrder, Types } from "mongoose";
+import { Types } from "mongoose";
 import {
   ClientFrequentFlyerProgram,
   FrequentFlyerProgram,
@@ -8,13 +8,7 @@ import {
 } from "./app/_models/frequent-flyer-program.model";
 import { connectDB } from "./lib/db";
 import { TransferRatio } from "./app/_models/transfer-ratio.model";
-import { CREDIT_CARD_COLLECTION } from "./app/_models/collections";
-import {
-  ClientCreditCard,
-  CreditCard,
-  CreditCardDocument,
-} from "./app/_models/credit-card.model";
-import { FFPFormSchema } from "./components/frequent-flyer-form";
+import { CreditCard } from "./app/_models/credit-card.model";
 import { uploadToS3 } from "./lib/upload-to-s3";
 
 export async function fetchFrequentFlyerPrograms({
