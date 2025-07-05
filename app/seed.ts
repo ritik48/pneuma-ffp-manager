@@ -168,12 +168,5 @@ export async function seed() {
 
   await TransferRatio.insertMany(ratios);
   console.log(`🔗 Inserted ${ratios.length} transfer ratios`);
-
-  // await mongoose.disconnect();
-  // console.log("✅ Seeding complete. DB disconnected.");
 }
 
-// seed().catch((err) => {
-//   console.error("❌ Error during seeding:", err);
-//   process.exit(1);
-// });
