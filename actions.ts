@@ -60,6 +60,7 @@ export async function deleteFrequentFlyerProgram(id: string) {
   }
 
   await FrequentFlyerProgram.findByIdAndDelete(id);
+  await TransferRatio.deleteMany({ programId: id });
 
   return { success: true };
 }
