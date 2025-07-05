@@ -7,6 +7,14 @@ import {
   FrequentFlyerProgramDocument,
 } from "./app/_models/frequent-flyer-program.model";
 import { connectDB } from "./lib/db";
+import { TransferRatio } from "./app/_models/transfer-ratio.model";
+import { CREDIT_CARD_COLLECTION } from "./app/_models/collections";
+import {
+  ClientCreditCard,
+  CreditCard,
+  CreditCardDocument,
+} from "./app/_models/credit-card.model";
+import { FFPFormSchema } from "./components/frequent-flyer-form";
 
 export async function fetchFrequentFlyerPrograms({
   page,
@@ -39,6 +47,8 @@ export async function fetchFrequentFlyerPrograms({
     _id: (program._id as Types.ObjectId).toString(),
   })) as ClientFrequentFlyerProgram[];
 
+  console.log({ serializedPrograms });
+
   return { programs: serializedPrograms, total };
 }
 
@@ -53,3 +63,56 @@ export async function deleteFrequentFlyerProgram(id: string) {
 
   return { success: true };
 }
+
+export async function fetchRatioData(id: string) {
+  await connectDB();
+
+  const rawRatios = await TransferRatio.find({ programId: id })
+    .populate({
+      path: "creditCardId",
+      select: "name",
+    })
+    .lean();
+
+  const ratios = rawRatios.map((r) => {
+    return {
+      _id: (r._id as Types.ObjectId).toString(),
+      ratio: r.ratio,
+      archived: r.archived,
+      programId: r.programId.toString(),
+      creditCardId: {
+        _id: r.creditCardId._id.toString(),
+        name: r.creditCardId.name,
+        // Add any other properties you need from creditCardId
+      },
+      createdAt: r.createdAt.toISOString(),
+      modifiedAt: r.modifiedAt.toISOString(),
+    };
+  });
+
+  // Then make sure you're returning a plain object
+  return JSON.parse(JSON.stringify(ratios));
+}
+
+export async function fetchCreditCards() {
+  await connectDB();
+
+  const rawCreditCards = await CreditCard.find(
+    {},
+    "name bankName archived createdAt modifiedAt"
+  )
+    .lean()
+    .exec();
+
+  const creditCards = rawCreditCards.map((cc) => ({
+    _id: (cc._id as Types.ObjectId).toString(),
+    name: cc.name,
+    bankName: cc.bankName,
+    archived: cc.archived,
+    createdAt: cc.createdAt.toISOString(),
+    modifiedAt: cc.modifiedAt.toISOString(),
+  }));
+
+  return creditCards;
+}
+
