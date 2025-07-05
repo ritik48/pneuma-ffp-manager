@@ -42,6 +42,7 @@ interface FrequentflyerProgramFormProps {
   ratioData?: RatioDataType[];
   ratioLoading: boolean;
   program?: ClientFrequentFlyerProgram;
+  ratioError: boolean;
 }
 
 export const frequentFlyerProgramFormSchema = z.object({
@@ -67,6 +68,7 @@ export function FrequentFlyerForm({
   ratioLoading,
   onSubmit,
   program,
+  ratioError,
 }: FrequentflyerProgramFormProps) {
   const initialRatios =
     ratioData?.map((item) => ({
@@ -153,11 +155,21 @@ export function FrequentFlyerForm({
           )}
         />
 
-        {ratioLoading ? (
-          <div className="text-sm text-center my-4">Loading ratios...</div>
-        ) : (
+        {ratioLoading && (
+          <div className="flex flex-col items-center gap-2 my-4">
+            <ClipLoader size={24} color="#b5b5b5" />
+            <div className="text-xs sm:text-sm">
+              Fetching your Credit Cards and Transfer Ratios.
+            </div>
+          </div>
+        )}
+        {!ratioLoading && ratioError && (
+          <div className="text-xs text-center sm:text-sm text-red-500 my-4">
+            Error fetching tranfer ratios. Please try again later.
+          </div>
+        )}
+        {!ratioLoading && !ratioError && (
           <>
-            {" "}
             <div className="space-y-4">
               <h3 className="text-sm font-medium">Manage Ratios</h3>
               {fields.map((field, index) => (

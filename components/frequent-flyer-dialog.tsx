@@ -27,19 +27,25 @@ export function FrequentFlyerFormDialog({
 }) {
   const isEdit = !!program?._id;
 
-  const { data: ratioData, isLoading: ratioDataLoading } = useQuery<
-    RatioDataType[]
-  >({
+  const {
+    data: ratioData,
+    isLoading: ratioDataLoading,
+    isError: ratioError,
+  } = useQuery<RatioDataType[]>({
+    retry: 2,
     enabled: open && isEdit,
     queryKey: ["program-ratios", program?._id],
     queryFn: () => fetchRatioData(program!._id!),
-    staleTime: 5 * 60 * 1000,
+    staleTime: 10 * 60 * 1000,
   });
 
-  const { data: creditCards, isLoading: creditCardsLoading } = useQuery<
-    ClientCreditCard[]
-  >({
+  const {
+    data: creditCards,
+    isLoading: creditCardsLoading,
+    isError: creditCardError,
+  } = useQuery<ClientCreditCard[]>({
     queryKey: ["credit-cards"],
+    retry: 2,
     queryFn: fetchCreditCards,
     enabled: open,
   });
@@ -57,6 +63,7 @@ export function FrequentFlyerFormDialog({
           program={program}
           ratioData={ratioData}
           ratioLoading={ratioDataLoading || creditCardsLoading}
+          ratioError={creditCardError || ratioError}
           onSubmit={onSubmit}
           creditCards={creditCards || []}
         />

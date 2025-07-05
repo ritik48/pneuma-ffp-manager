@@ -25,6 +25,7 @@ import { DeleteFrequentFlyer } from "./delete-frequent-flyer";
 import { FrequentFlyerDialogWrapper } from "./frequent-flyer-dialog-wrapper";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { FrequentFlyerToggle } from "./toggle-frequent-flyer-program";
+import { ClipLoader } from "react-spinners";
 
 export default function FrequentFlyerClientTable() {
   const [page, setPage] = useState(1);
@@ -42,6 +43,7 @@ export default function FrequentFlyerClientTable() {
     total: number;
   }>({
     queryKey,
+    retry: 2,
     queryFn: () =>
       fetchFrequentFlyerPrograms({
         page,
@@ -79,100 +81,124 @@ export default function FrequentFlyerClientTable() {
           Add Program <Plus />
         </FrequentFlyerDialogWrapper>
       </div>
-      <div className="max-h-[calc(100vh-200px)] overflow-auto">
-        <Table className="overflow-auto h-full w-full">
-          <TableHeader>
-            <TableRow>
-              <TableHead onClick={() => toggleSort("name")}>
-                Name{" "}
-                {sortField === "name" &&
-                  (sortOrder === "asc" ? (
-                    <ChevronUp className="inline w-4 h-4" />
-                  ) : (
-                    <ChevronDown className="inline w-4 h-4" />
-                  ))}
-              </TableHead>
-              <TableHead>Logo</TableHead>
-              <TableHead>Enabled</TableHead>
-              <TableHead onClick={() => toggleSort("createdAt")}>
-                Created
-              </TableHead>
-              <TableHead>Modified</TableHead>
-              <TableHead>Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {programs.map((ffp) => (
-              <TableRow key={ffp._id}>
-                <TableCell>{ffp.name}</TableCell>
-                <TableCell>
-                  <Avatar>
-                    <AvatarImage
-                      className="object-contain w-10 h-10 rounded-full"
-                      src={`${ffp.assetName}`}
-                      alt="@shadcn"
-                    />
-                    <AvatarFallback>
-                      {ffp.name[0].toUpperCase() + ffp.name[1]?.toUpperCase() ||
-                        ""}
-                    </AvatarFallback>
-                  </Avatar>
-                </TableCell>
-                <TableCell>
-                  <FrequentFlyerToggle
-                    initialEnabled={ffp.enabled}
-                    id={ffp._id}
-                    queryKey={queryKey}
-                  />
-                </TableCell>
-                <TableCell className="text-xs sm:text-sm">
-                  {format(new Date(ffp.createdAt), "PPP p")}
-                </TableCell>
-                <TableCell className="text-xs sm:text-sm">
-                  {format(new Date(ffp.modifiedAt), "PPP p")}
-                </TableCell>
-                <TableCell>
-                  <div className="flex gap-2">
-                    <FrequentFlyerDialogWrapper
-                      program={ffp}
-                      queryKey={queryKey}
-                    >
-                      <Pencil />
-                    </FrequentFlyerDialogWrapper>
-                    <DeleteFrequentFlyer
-                      id={ffp._id}
-                      page={page}
-                      sortField={sortField}
-                      sortOrder={sortOrder}
-                      queryKey={queryKey}
-                    />
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
 
-      <div className="flex justify-end">
-        <Pagination>
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                onClick={() => setPage((p) => Math.max(p - 1, 1))}
-              />
-            </PaginationItem>
-            <PaginationItem>
-              Page {page} of {totalPages}
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationNext
-                onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
-      </div>
+      {isLoading && (
+        <div className="flex justify-center items-center mt-[100px]">
+          <ClipLoader size={30} className="mx-auto" color="#b5b5b5" />
+        </div>
+      )}
+
+      {isError && !isLoading && (
+        <div className="flex justify-center items-center mt-[100px]">
+          <p className="text-red-500 text-xs sm:text-sm">
+            Error while fetching the programs.
+          </p>
+        </div>
+      )}
+      {!isError && !isLoading && total === 0 && (
+        <div className="flex justify-center items-center mt-[100px]">
+          <p className="font-semibold text-xs sm:text-sm">
+            You don't have any programs yet. Create One.
+          </p>
+        </div>
+      )}
+      {!isError && !isLoading && total > 0 && (
+        <>
+          <div className="max-h-[calc(100vh-200px)] overflow-auto">
+            <Table className="overflow-auto h-full w-full">
+              <TableHeader>
+                <TableRow>
+                  <TableHead onClick={() => toggleSort("name")}>
+                    Name{" "}
+                    {sortField === "name" &&
+                      (sortOrder === "asc" ? (
+                        <ChevronUp className="inline w-4 h-4" />
+                      ) : (
+                        <ChevronDown className="inline w-4 h-4" />
+                      ))}
+                  </TableHead>
+                  <TableHead>Logo</TableHead>
+                  <TableHead>Enabled</TableHead>
+                  <TableHead onClick={() => toggleSort("createdAt")}>
+                    Created
+                  </TableHead>
+                  <TableHead>Modified</TableHead>
+                  <TableHead>Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {programs.map((ffp) => (
+                  <TableRow key={ffp._id}>
+                    <TableCell>{ffp.name}</TableCell>
+                    <TableCell>
+                      <Avatar>
+                        <AvatarImage
+                          className="object-contain w-10 h-10 rounded-full"
+                          src={`${ffp.assetName}`}
+                          alt="@shadcn"
+                        />
+                        <AvatarFallback>
+                          {ffp.name[0].toUpperCase() +
+                            ffp.name[1]?.toUpperCase() || ""}
+                        </AvatarFallback>
+                      </Avatar>
+                    </TableCell>
+                    <TableCell>
+                      <FrequentFlyerToggle
+                        initialEnabled={ffp.enabled}
+                        id={ffp._id}
+                        queryKey={queryKey}
+                      />
+                    </TableCell>
+                    <TableCell className="text-xs sm:text-sm">
+                      {format(new Date(ffp.createdAt), "PPP p")}
+                    </TableCell>
+                    <TableCell className="text-xs sm:text-sm">
+                      {format(new Date(ffp.modifiedAt), "PPP p")}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex gap-2">
+                        <FrequentFlyerDialogWrapper
+                          program={ffp}
+                          queryKey={queryKey}
+                        >
+                          <Pencil />
+                        </FrequentFlyerDialogWrapper>
+                        <DeleteFrequentFlyer
+                          id={ffp._id}
+                          page={page}
+                          sortField={sortField}
+                          sortOrder={sortOrder}
+                          queryKey={queryKey}
+                        />
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+          <div className="flex justify-end">
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    onClick={() => setPage((p) => Math.max(p - 1, 1))}
+                  />
+                </PaginationItem>
+                <PaginationItem>
+                  Page {page} of {totalPages}
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationNext
+                    onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
+        </>
+      )}
     </div>
   );
 }
