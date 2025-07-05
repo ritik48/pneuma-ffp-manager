@@ -91,7 +91,7 @@ export default function Signup() {
                   {isSubmitting ? "Creating..." : "Signup"}
                 </Button>
                 <Link
-                  href={"/signin"}
+                  href={"/login"}
                   className="text-left text-sm hover:underline mt-1"
                 >
                   Already have an account ?
