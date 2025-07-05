@@ -49,19 +49,18 @@ export default function FrequentFlyerClientTable() {
   const [page, setPage] = useState(1);
   const [sortField, setSortField] = useState("createdAt");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
-  const [open, setOpen] = useState(false);
 
   const ITEMS_PER_PAGE = 10;
-  const queryClient = useQueryClient();
 
   // Fetch data with React Query
-  const queryKey = "frequent-flyer-programs";
+  const ffpKey = "frequent-flyer-program";
+  const queryKey = [ffpKey, page, sortField, sortOrder];
 
   const { data, isLoading, isError, error } = useQuery<{
     programs: ClientFrequentFlyerProgram[];
     total: number;
   }>({
-    queryKey: [queryKey, page, sortField, sortOrder],
+    queryKey,
     queryFn: () =>
       fetchFrequentFlyerPrograms({
         page,
@@ -92,7 +91,7 @@ export default function FrequentFlyerClientTable() {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h1 className="text-xl font-semibold">Frequent Flyer Programs</h1>
-        <FrequentFlyerDialogWrapper>
+        <FrequentFlyerDialogWrapper queryKey={queryKey}>
           Add Program <Plus />
         </FrequentFlyerDialogWrapper>
       </div>
@@ -141,7 +140,10 @@ export default function FrequentFlyerClientTable() {
                 </TableCell>
                 <TableCell>
                   <div className="flex gap-2">
-                    <FrequentFlyerDialogWrapper program={ffp}>
+                    <FrequentFlyerDialogWrapper
+                      program={ffp}
+                      queryKey={queryKey}
+                    >
                       <Pencil />
                     </FrequentFlyerDialogWrapper>
                     <DeleteFrequentFlyer
