@@ -1,24 +1,25 @@
-import { Schema, Document, models, model } from "mongoose";
+import { Schema, Document, models, model, Types } from "mongoose";
 import { FPP_COLLECTION } from "./collections";
 
-export interface FrequentFlyerProgramDocument extends Document {
+export interface ClientFrequentFlyerProgram {
+  _id: string;
   name: string;
   assetName: string;
   enabled: boolean;
   archived: boolean;
+  createdAt: string;
+  modifiedAt: string;
+}
+
+export interface FrequentFlyerProgramDocument
+  extends Omit<ClientFrequentFlyerProgram, "_id" | "createdAt" | "modifiedAt">,
+    Document {
+  _id: Types.ObjectId;
   createdAt: Date;
   modifiedAt: Date;
 }
 
 // to be used in the client
-export type ClientFrequentFlyerProgram = Omit<
-  FrequentFlyerProgramDocument,
-  "_id"
-> & {
-  _id: string;
-  createdAt: string;
-  modifiedAt: string;
-};
 
 const FrequentFlyerProgramSchema = new Schema<FrequentFlyerProgramDocument>(
   {

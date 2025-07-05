@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document, models, model, Types } from "mongoose";
+import { Schema, Document, models, model, Types } from "mongoose";
 import { CREDIT_CARD_COLLECTION } from "./collections";
 
 export interface ClientCreditCard {

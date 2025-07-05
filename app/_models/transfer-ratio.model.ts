@@ -1,23 +1,29 @@
-import mongoose, { Schema, Document, models, model } from "mongoose";
+import mongoose, { Schema, Document, models, model, Types } from "mongoose";
 import { CREDIT_CARD_COLLECTION, FPP_COLLECTION } from "./collections";
 
-export interface TransferRatioDocument extends Document {
-  programId: mongoose.Types.ObjectId;
-  creditCardId: mongoose.Types.ObjectId;
-  ratio: number;
-  archived: boolean;
-  createdAt: Date;
-  modifiedAt: Date;
-}
-
 // to be used in the client
-export type ClientTransferRatio = Omit<TransferRatioDocument, "_id"> & {
+export interface ClientTransferRatio {
   _id: string;
   programId: string;
   creditCardId: string;
   createdAt: string;
   modifiedAt: string;
-};
+  ratio: number;
+  archived: boolean;
+}
+
+export interface TransferRatioDocument
+  extends Omit<
+      ClientTransferRatio,
+      "_id" | "createdAt" | "modifiedAt" | "programId" | "creditCardId"
+    >,
+    Document {
+  _id: Types.ObjectId;
+  programId: mongoose.Types.ObjectId;
+  creditCardId: mongoose.Types.ObjectId;
+  createdAt: Date;
+  modifiedAt: Date;
+}
 
 const TransferRatioSchema = new Schema<TransferRatioDocument>(
   {
