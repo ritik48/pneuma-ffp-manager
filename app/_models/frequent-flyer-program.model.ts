@@ -29,7 +29,6 @@ const FrequentFlyerProgramSchema = new Schema<FrequentFlyerProgramDocument>(
     },
     assetName: {
       type: String,
-      required: true,
     },
     enabled: {
       type: Boolean,
