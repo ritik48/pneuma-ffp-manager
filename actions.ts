@@ -15,6 +15,7 @@ import {
   CreditCardDocument,
 } from "./app/_models/credit-card.model";
 import { FFPFormSchema } from "./components/frequent-flyer-form";
+import { uploadToS3 } from "./lib/upload-to-s3";
 
 export async function fetchFrequentFlyerPrograms({
   page,
@@ -125,7 +126,27 @@ export async function addFrequentFlyerProgram(formData: FormData) {
   }[];
 
   const file = formData.get("image") as File | null;
-  let assetUrl = "";
+  let assetUrl: string | null = "";
+  if (file) assetUrl = await uploadToS3(file);
 
-  console.log({ name, enabled, ratios, file });
+  const fpp = await FrequentFlyerProgram.create({
+    name,
+    enabled,
+    assetName: assetUrl ?? "",
+  });
+
+  const bulkRatioData = ratios.map((ratio) => ({
+    insertOne: {
+      document: {
+        ...ratio,
+        programId: fpp._id,
+      },
+    },
+  }));
+
+  await TransferRatio.bulkWrite(bulkRatioData);
+
+  const plainFpp = fpp.toObject();
+
+  return plainFpp;
 }
