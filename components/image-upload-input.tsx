@@ -43,7 +43,7 @@ export function ImageUploadInput({ value, onChange, existingImageUrl }: Props) {
   };
 
   return (
-    <div className="relative w-full h-32 rounded-md overflow-hidden border group cursor-pointer">
+    <div className="relative w-full h-32 rounded-md overflow-hidden border group cursor-pointer flex items-center justify-center">
       <input
         ref={inputRef}
         type="file"
@@ -52,24 +52,26 @@ export function ImageUploadInput({ value, onChange, existingImageUrl }: Props) {
         className="hidden"
       />
 
-      {/* Image preview */}
       <img
-        src={previewUrl || existingImageUrl || "/placeholder.svg"}
+        src={previewUrl || existingImageUrl || "/placeholder.png"}
         alt="Preview"
         onClick={handleClick}
-        className="w-full h-full object-contain transition duration-300 group-hover:opacity-80"
+        className={`transition duration-300 ${
+          previewUrl || existingImageUrl
+            ? "w-full h-full object-contain"
+            : "w-10 h-10 object-contain m-auto opacity-50"
+        }`}
       />
-
-      {/* Overlay + Upload icon on hover */}
       <div
         onClick={handleClick}
         className="absolute inset-0 bg-black/50 text-white opacity-0 group-hover:opacity-100 flex items-center justify-center transition"
       >
         <Upload className="w-5 h-5 mr-2" />
-        <span className="text-sm">Change</span>
+        <span className="text-sm">
+          {!existingImageUrl && !previewUrl ? "Upload" : "Change"}
+        </span>
       </div>
 
-      {/* Remove button */}
       {previewUrl && (
         <Button
           type="button"
