@@ -181,19 +181,25 @@ export default function FrequentFlyerClientTable() {
           <div className="flex justify-end">
             <Pagination>
               <PaginationContent>
-                <PaginationItem>
-                  <PaginationPrevious
-                    onClick={() => setPage((p) => Math.max(p - 1, 1))}
-                  />
-                </PaginationItem>
+                {page > 1 && (
+                  <PaginationItem>
+                    <PaginationPrevious
+                      onClick={() => setPage((p) => Math.max(p - 1, 1))}
+                    />
+                  </PaginationItem>
+                )}
                 <PaginationItem>
                   Page {page} of {totalPages}
                 </PaginationItem>
-                <PaginationItem>
-                  <PaginationNext
-                    onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
-                  />
-                </PaginationItem>
+                {page < totalPages && (
+                  <PaginationItem>
+                    <PaginationNext
+                      onClick={() =>
+                        setPage((p) => Math.min(p + 1, totalPages))
+                      }
+                    />
+                  </PaginationItem>
+                )}
               </PaginationContent>
             </Pagination>
           </div>
