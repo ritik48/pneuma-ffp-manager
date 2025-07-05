@@ -52,7 +52,7 @@ export default function FrequentFlyerClientTable() {
         items_per_page: ITEMS_PER_PAGE,
       }),
     placeholderData: (prev) => prev,
-    staleTime: 6 * 1000,
+    staleTime: 10 * 60 * 1000,
   });
 
   const programs = data?.programs || [];
