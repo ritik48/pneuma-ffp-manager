@@ -150,3 +150,49 @@ export async function addFrequentFlyerProgram(formData: FormData) {
 
   return plainFpp;
 }
+
+export async function updateFrequentFlyerProgram(formData: FormData) {
+  const id = formData.get("id") as string;
+  const name = formData.get("name") as string;
+  const enabled = formData.get("enabled") === "true";
+  const ratios = JSON.parse(formData.get("ratios") as string) as {
+    creditCardId: string;
+    ratio: number;
+  }[];
+
+  const file = formData.get("image") as File | null;
+  let assetUrl: string | null = "";
+
+  const fppExists = await FrequentFlyerProgram.findById(id);
+
+  if (!fppExists) {
+    throw new Error("Fpp not found");
+  }
+
+  if (file) assetUrl = await uploadToS3(file);
+
+  const fppUpdated = await FrequentFlyerProgram.findByIdAndUpdate(
+    id,
+    {
+      name,
+      enabled,
+      ...(file ? { assetName: assetUrl } : {}),
+    },
+    { new: true }
+  );
+
+  await TransferRatio.deleteMany({ programId: id });
+
+  const bulkRatioData = ratios.map((ratio) => ({
+    insertOne: {
+      document: {
+        ...ratio,
+        programId: id,
+      },
+    },
+  }));
+
+  await TransferRatio.bulkWrite(bulkRatioData);
+  const plainFpp = fppUpdated.toObject();
+  return plainFpp;
+}
