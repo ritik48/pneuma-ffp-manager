@@ -44,6 +44,7 @@ import { DeleteFrequentFlyer } from "./delete-frequent-flyer";
 import { FrequentFlyerDialogWrapper } from "./frequent-flyer-dialog-wrapper";
 import { FFPFormSchema } from "./frequent-flyer-form";
 import Image from "next/image";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 export default function FrequentFlyerClientTable() {
   const [page, setPage] = useState(1);
@@ -88,9 +89,12 @@ export default function FrequentFlyerClientTable() {
   const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 px-3">
       <div className="flex justify-between items-center">
-        <h1 className="text-xl font-semibold">Frequent Flyer Programs</h1>
+        <h1 className="sm:text-xl font-semibold">
+          Frequent Flyer Programs{" "}
+          <span className="text-xs text-muted-foreground">({total})</span>
+        </h1>
         <FrequentFlyerDialogWrapper queryKey={queryKey}>
           Add Program <Plus />
         </FrequentFlyerDialogWrapper>
@@ -122,20 +126,31 @@ export default function FrequentFlyerClientTable() {
               <TableRow key={ffp._id}>
                 <TableCell>{ffp.name}</TableCell>
                 <TableCell>
-                  <Image
+                  {/* <Image
                     src={`${ffp.assetName || "/placeholder.svg"}`}
                     alt="logo"
                     width={40}
                     height={40}
-                  />
+                  /> */}
+
+                  <Avatar>
+                    <AvatarImage
+                      className="object-contain w-10 h-10 rounded-full"
+                      src={`${ffp.assetName}`}
+                      alt="@shadcn"
+                    />
+                    <AvatarFallback>
+                      {ffp.name[0].toUpperCase() + ffp.name[1]?.toUpperCase()||""}
+                    </AvatarFallback>
+                  </Avatar>
                 </TableCell>
                 <TableCell>
                   <Switch checked={ffp.enabled} disabled />
                 </TableCell>
-                <TableCell>
+                <TableCell className="text-xs sm:text-sm">
                   {format(new Date(ffp.createdAt), "PPP p")}
                 </TableCell>
-                <TableCell>
+                <TableCell className="text-xs sm:text-sm">
                   {format(new Date(ffp.modifiedAt), "PPP p")}
                 </TableCell>
                 <TableCell>

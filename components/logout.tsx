@@ -5,6 +5,8 @@ import { Button } from "./ui/button";
 
 export function Logout() {
   return (
-    <Button onClick={() => signOut({ redirectTo: "/login" })}>Logout</Button>
+    <Button size={"sm"} onClick={() => signOut({ redirectTo: "/login" })}>
+      Logout
+    </Button>
   );
 }
