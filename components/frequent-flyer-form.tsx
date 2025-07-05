@@ -6,6 +6,7 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { ClipLoader } from "react-spinners";
 import {
   Form,
   FormControl,
@@ -73,8 +74,6 @@ export function FrequentFlyerForm({
       ratio: item.ratio,
     })) || [];
 
-  console.log({ initialRatios });
-
   const form = useForm<FFPFormSchema>({
     resolver: zodResolver(frequentFlyerProgramFormSchema),
     defaultValues: {
@@ -85,7 +84,7 @@ export function FrequentFlyerForm({
     },
   });
 
-  const assetUrl = program?.assetName;
+  const isSubmitting = form.formState.isSubmitting;
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
@@ -227,8 +226,9 @@ export function FrequentFlyerForm({
                 <Plus className="w-4 h-4 mr-2" /> Add Ratio
               </Button>
             </div>
-            <Button type="submit" className="w-full">
-              {form.getValues("name") ? "Update Program" : "Create Program"}
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
+              {form.getValues("name") ? "Update Program" : "Create Program"}{" "}
+              {isSubmitting && <ClipLoader size={14} color="#b5b5b5" />}
             </Button>
           </>
         )}
