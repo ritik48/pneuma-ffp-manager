@@ -10,6 +10,7 @@ import { connectDB } from "./lib/db";
 import { TransferRatio } from "./app/_models/transfer-ratio.model";
 import { CreditCard } from "./app/_models/credit-card.model";
 import { uploadToS3 } from "./lib/upload-to-s3";
+import { checkAuth } from "./lib/auth-util";
 
 export async function fetchFrequentFlyerPrograms({
   page,
@@ -23,6 +24,8 @@ export async function fetchFrequentFlyerPrograms({
   items_per_page: number;
 }) {
   await connectDB();
+  await checkAuth();
+
   const skip = (page - 1) * items_per_page;
 
   const [programs, total] = await Promise.all([
@@ -49,6 +52,8 @@ export async function fetchFrequentFlyerPrograms({
 
 export async function deleteFrequentFlyerProgram(id: string) {
   await connectDB();
+  await checkAuth();
+
   const ffp = await FrequentFlyerProgram.findById(id);
   if (!ffp) {
     return { success: false, message: "Frequent Flyer Program not found" };
@@ -61,6 +66,7 @@ export async function deleteFrequentFlyerProgram(id: string) {
 
 export async function fetchRatioData(id: string) {
   await connectDB();
+  await checkAuth();
 
   const rawRatios = await TransferRatio.find({ programId: id })
     .populate({
@@ -91,13 +97,12 @@ export async function fetchRatioData(id: string) {
 
 export async function fetchCreditCards() {
   await connectDB();
+  await checkAuth();
 
   const rawCreditCards = await CreditCard.find(
     {},
     "name bankName archived createdAt modifiedAt"
-  )
-    .lean()
-    .exec();
+  ).lean();
 
   const creditCards = rawCreditCards.map((cc) => ({
     _id: (cc._id as Types.ObjectId).toString(),
@@ -112,6 +117,9 @@ export async function fetchCreditCards() {
 }
 
 export async function addFrequentFlyerProgram(formData: FormData) {
+  await connectDB();
+  await checkAuth();
+
   const name = formData.get("name") as string;
   const enabled = formData.get("enabled") === "true";
   const ratios = JSON.parse(formData.get("ratios") as string) as {
@@ -146,6 +154,9 @@ export async function addFrequentFlyerProgram(formData: FormData) {
 }
 
 export async function updateFrequentFlyerProgram(formData: FormData) {
+  await connectDB();
+  await checkAuth();
+
   const id = formData.get("id") as string;
   const name = formData.get("name") as string;
   const enabled = formData.get("enabled") === "true";
@@ -197,6 +208,7 @@ export async function updateFrequentFlyerProgramStatus(
 ) {
   try {
     await connectDB();
+    await checkAuth();
 
     const ffpExists = await FrequentFlyerProgram.findById(id);
     if (!ffpExists) {
