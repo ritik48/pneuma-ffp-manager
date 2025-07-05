@@ -43,6 +43,7 @@ import { fetchFrequentFlyerPrograms } from "@/actions";
 import { DeleteFrequentFlyer } from "./delete-frequent-flyer";
 import { FrequentFlyerDialogWrapper } from "./frequent-flyer-dialog-wrapper";
 import { FFPFormSchema } from "./frequent-flyer-form";
+import Image from "next/image";
 
 export default function FrequentFlyerClientTable() {
   const [page, setPage] = useState(1);
@@ -95,56 +96,68 @@ export default function FrequentFlyerClientTable() {
           Add Program <Plus />
         </FrequentFlyerDialogWrapper>
       </div>
-
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead onClick={() => toggleSort("name")}>
-              Name{" "}
-              {sortField === "name" &&
-                (sortOrder === "asc" ? (
-                  <ChevronUp className="inline w-4 h-4" />
-                ) : (
-                  <ChevronDown className="inline w-4 h-4" />
-                ))}
-            </TableHead>
-            <TableHead>Logo</TableHead>
-            <TableHead>Enabled</TableHead>
-            <TableHead onClick={() => toggleSort("createdAt")}>
-              Created
-            </TableHead>
-            <TableHead>Modified</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {programs.map((ffp) => (
-            <TableRow key={ffp._id}>
-              <TableCell>{ffp.name}</TableCell>
-              <TableCell>{ffp.assetName}</TableCell>
-              <TableCell>
-                <Switch checked={ffp.enabled} disabled />
-              </TableCell>
-              <TableCell>{format(new Date(ffp.createdAt), "PPP p")}</TableCell>
-              <TableCell>{format(new Date(ffp.modifiedAt), "PPP p")}</TableCell>
-              <TableCell>
-                <div className="flex gap-2">
-                  <FrequentFlyerDialogWrapper program={ffp}>
-                    <Pencil />
-                  </FrequentFlyerDialogWrapper>
-                  <DeleteFrequentFlyer
-                    id={ffp._id}
-                    page={page}
-                    sortField={sortField}
-                    sortOrder={sortOrder}
-                    queryKey={queryKey}
-                  />
-                </div>
-              </TableCell>
+      <div className="max-h-[calc(100vh-200px)] overflow-auto">
+        <Table className="overflow-auto h-full w-full">
+          <TableHeader>
+            <TableRow>
+              <TableHead onClick={() => toggleSort("name")}>
+                Name{" "}
+                {sortField === "name" &&
+                  (sortOrder === "asc" ? (
+                    <ChevronUp className="inline w-4 h-4" />
+                  ) : (
+                    <ChevronDown className="inline w-4 h-4" />
+                  ))}
+              </TableHead>
+              <TableHead>Logo</TableHead>
+              <TableHead>Enabled</TableHead>
+              <TableHead onClick={() => toggleSort("createdAt")}>
+                Created
+              </TableHead>
+              <TableHead>Modified</TableHead>
+              <TableHead>Actions</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {programs.map((ffp) => (
+              <TableRow key={ffp._id}>
+                <TableCell>{ffp.name}</TableCell>
+                <TableCell>
+                  <Image
+                    src={`${ffp.assetName || "/placeholder.svg"}`}
+                    alt="logo"
+                    width={40}
+                    height={40}
+                  />
+                </TableCell>
+                <TableCell>
+                  <Switch checked={ffp.enabled} disabled />
+                </TableCell>
+                <TableCell>
+                  {format(new Date(ffp.createdAt), "PPP p")}
+                </TableCell>
+                <TableCell>
+                  {format(new Date(ffp.modifiedAt), "PPP p")}
+                </TableCell>
+                <TableCell>
+                  <div className="flex gap-2">
+                    <FrequentFlyerDialogWrapper program={ffp}>
+                      <Pencil />
+                    </FrequentFlyerDialogWrapper>
+                    <DeleteFrequentFlyer
+                      id={ffp._id}
+                      page={page}
+                      sortField={sortField}
+                      sortOrder={sortOrder}
+                      queryKey={queryKey}
+                    />
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
 
       <div className="flex justify-end">
         <Pagination>
