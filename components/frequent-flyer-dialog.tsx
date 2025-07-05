@@ -1,8 +1,6 @@
 "use client";
 
 import { Dispatch, SetStateAction, useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Dialog,
   DialogContent,
@@ -15,7 +13,6 @@ import { ClientFrequentFlyerProgram } from "@/app/_models/frequent-flyer-program
 import { ClientCreditCard } from "@/app/_models/credit-card.model";
 import { fetchCreditCards, fetchRatioData } from "@/actions";
 import { FrequentFlyerForm, RatioDataType } from "./frequent-flyer-form";
-// import { fetchProgramRatios } from "@/lib/api";
 
 export function FrequentFlyerFormDialog({
   program,

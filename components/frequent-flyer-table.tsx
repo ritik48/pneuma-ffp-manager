@@ -1,8 +1,6 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useState } from "react";
 import { Switch } from "@/components/ui/switch";
 import {
   Table,
@@ -20,30 +18,12 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { format } from "date-fns";
-// import { createFrequentFlyerProgram } from "@/actions";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  ChevronDown,
-  ChevronUp,
-  Pencil,
-  PencilIcon,
-  Plus,
-  Trash,
-} from "lucide-react";
-import { useRouter } from "next/navigation";
+import { ChevronDown, ChevronUp, Pencil, Plus } from "lucide-react";
 import { ClientFrequentFlyerProgram } from "@/app/_models/frequent-flyer-program.model";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { fetchFrequentFlyerPrograms } from "@/actions";
 import { DeleteFrequentFlyer } from "./delete-frequent-flyer";
 import { FrequentFlyerDialogWrapper } from "./frequent-flyer-dialog-wrapper";
-import { FFPFormSchema } from "./frequent-flyer-form";
-import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 export default function FrequentFlyerClientTable() {
@@ -126,13 +106,6 @@ export default function FrequentFlyerClientTable() {
               <TableRow key={ffp._id}>
                 <TableCell>{ffp.name}</TableCell>
                 <TableCell>
-                  {/* <Image
-                    src={`${ffp.assetName || "/placeholder.svg"}`}
-                    alt="logo"
-                    width={40}
-                    height={40}
-                  /> */}
-
                   <Avatar>
                     <AvatarImage
                       className="object-contain w-10 h-10 rounded-full"
@@ -140,7 +113,8 @@ export default function FrequentFlyerClientTable() {
                       alt="@shadcn"
                     />
                     <AvatarFallback>
-                      {ffp.name[0].toUpperCase() + ffp.name[1]?.toUpperCase()||""}
+                      {ffp.name[0].toUpperCase() + ffp.name[1]?.toUpperCase() ||
+                        ""}
                     </AvatarFallback>
                   </Avatar>
                 </TableCell>

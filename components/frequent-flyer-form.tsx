@@ -91,7 +91,7 @@ export function FrequentFlyerForm({
     name: "ratios",
   });
 
-  // we have to do this as the ratio are fetched asynchrously, and default values are set only once
+  // we have to do this as the ratio are fetched asynchronously, and default values are set only once
   useEffect(() => {
     form.setValue("ratios", initialRatios);
   }, [ratioLoading]);
