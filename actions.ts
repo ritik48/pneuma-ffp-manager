@@ -196,3 +196,21 @@ export async function updateFrequentFlyerProgram(formData: FormData) {
   const plainFpp = fppUpdated.toObject();
   return plainFpp;
 }
+
+export async function updateFrequentFlyerProgramStatus(
+  id: string,
+  checked: boolean
+) {
+  try {
+    await connectDB();
+
+    const ffpExists = await FrequentFlyerProgram.findById(id);
+    if (!ffpExists) {
+      throw new Error("Invalid Requests");
+    }
+
+    await FrequentFlyerProgram.findByIdAndUpdate(id, { enabled: checked });
+  } catch (error: any) {
+    throw new Error(error.message || "Server Error");
+  }
+}
