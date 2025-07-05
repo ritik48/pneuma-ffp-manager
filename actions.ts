@@ -116,3 +116,16 @@ export async function fetchCreditCards() {
   return creditCards;
 }
 
+export async function addFrequentFlyerProgram(formData: FormData) {
+  const name = formData.get("name") as string;
+  const enabled = formData.get("enabled") === "true";
+  const ratios = JSON.parse(formData.get("ratios") as string) as {
+    creditCardId: string;
+    ratio: number;
+  }[];
+
+  const file = formData.get("image") as File | null;
+  let assetUrl = "";
+
+  console.log({ name, enabled, ratios, file });
+}
