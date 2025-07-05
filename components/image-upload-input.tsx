@@ -14,8 +14,6 @@ export function ImageUploadInput({ value, onChange, existingImageUrl }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
-  console.log({ value });
-
   useEffect(() => {
     if (value?.[0]) {
       const url = URL.createObjectURL(value[0]);
