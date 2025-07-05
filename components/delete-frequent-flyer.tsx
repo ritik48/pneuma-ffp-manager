@@ -6,7 +6,7 @@ import { deleteFrequentFlyerProgram } from "@/actions";
 
 interface DeleteFrequentFlyerProps {
   id: string;
-  queryKey: string;
+  queryKey: (string | number)[];
   sortField: string;
   sortOrder: "asc" | "desc";
   page: number;
@@ -26,7 +26,7 @@ export function DeleteFrequentFlyer({
     queryClient.setQueryData<{
       programs: ClientFrequentFlyerProgram[];
       total: number;
-    }>([queryKey, page, sortField, sortOrder], (old) => {
+    }>(queryKey, (old) => {
       if (!old) return { programs: [], total: 0 };
 
       return {
